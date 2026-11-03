@@ -1,0 +1,84 @@
+MATCHING ILLINOIS GOOGLE METADATA TO CHICAGO FOOD INSPECTIONS
+
+Source files
+- meta-Illinois.json: newline-delimited JSON containing Google place metadata.
+  Load it with pandas.read_json("meta-Illinois.json", lines=True).
+- Food_Inspections_20261103.csv: individual food inspection records.
+
+Recommended approach
+Use normalized street addresses to find candidate businesses, then confirm
+matches using business names and coordinates. There is no shared identifier:
+Google uses gmap_id, while inspections use License #.
+
+1. Prepare the metadata.
+   Filter to Chicago and the categories relevant to your analysis. For a pizza
+   project, start with categories containing "pizza". Inspect duplicate gmap_id
+   records and resolve conflicting values before keeping one record per place.
+   Keep the original names, addresses, and identifiers for auditing.
+
+2. Normalize addresses in both datasets.
+   Remove the business-name prefix from Google addresses and separate the street,
+   city, state, and ZIP code. Standardize capitalization, punctuation, whitespace,
+   street directions (North -> N), and street suffixes (Street -> ST).
+   Keep suite and unit numbers separately so they can help resolve ambiguity.
+   Some Google addresses include a building name before the street address;
+   taking the first comma-separated field will miss these cases. Handle street
+   number ranges and letter suffixes explicitly rather than discarding them.
+
+3. Match candidates at the same normalized street address.
+   Compare Google's name against both DBA Name and AKA Name. Normalize case,
+   punctuation, accents, and whitespace in names. Accept clear, unique matches
+   after checking for conflicting businesses; flag ambiguous matches for review.
+   Use city and ZIP as supporting evidence, allowing for missing or incorrect
+   values. Retain historical name variants and their inspection dates.
+
+4. Recover remaining matches.
+   Use fuzzy name comparisons among candidates at the same address. For address
+   discrepancies, look for nearby coordinates, initially within about 100 meters,
+   and require supporting name or address evidence. This distance is a starting
+   point to calibrate by reviewing examples, not a validated acceptance rule.
+   Do not match on proximity or a chain name alone. Review candidates with
+   multiple plausible matches, and leave unsupported records unmatched.
+
+5. Save a mapping table before joining inspection records.
+   Include gmap_id, License #, inspection-side name and address, matching method,
+   name similarity, geographic distance, and review status. Include inspection
+   dates or the relevant business period when needed to distinguish historical
+   operators. Match business identities before attaching their inspection history;
+   do not fuzzy-match each inspection independently. Preserve Inspection ID so
+   the final joined table can be checked for accidental duplication.
+
+6. Attach only the inspections belonging to the matched business.
+   A place may have multiple inspections and may have multiple historical
+   licenses. An address or license alone does not establish business identity.
+   Check names, addresses, and dates before attaching records. For a restaurant-
+   level analysis, aggregate inspections within an explicitly defined date window
+   before combining them with one metadata record per Google place.
+
+Initial profile of the local files
+These counts came from a preliminary normalization pass on November 3, 2026.
+They describe candidate matches, not verified business links, and will change
+with improved address parsing or updated source files.
+
+- Metadata records statewide: 179,205.
+- Unique gmap_id values statewide: 178,204.
+- Unique Chicago Google places: 37,127.
+- Inspection records: 317,961.
+- Unique Chicago Google places with a category containing "pizza": 705.
+- Of those 705 places, 577 have an exact normalized street-address candidate.
+- Of those 705 places, 274 also have an exact normalized name match against
+  an inspection DBA Name or AKA Name at that address.
+- Of those 705 places, 416 have multiple inspection licenses at their matching
+  street address. This includes records that also have an exact name match.
+
+Important cautions
+- Never assign every inspection at an address to one Google place. For example,
+  945 W Randolph St has inspection records for Tomato Head, Blackwood BBQ,
+  Umami Burger, and Voodoo Doughnut.
+- Some licenses are associated with different business names over time, so a
+  license-only join can attach another operator's inspection history.
+- Shared buildings, food courts, chains, rebranding, ownership changes, and
+  closed businesses require extra review.
+- The metadata has no explicit snapshot date. Its ratings cannot be assumed to
+  describe the business in 2026. Define and justify the inspection date window
+  when analyzing ratings versus inspection results.

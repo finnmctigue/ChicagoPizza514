@@ -1,0 +1,4 @@
+# Large source datasets (keep local).
+/review*.json
+/meta*.json
+/[Ff]ood_[Ii]nspections*.csv

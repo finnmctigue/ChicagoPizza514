@@ -1,0 +1,560 @@
+{
+  "inspections": {
+    "cities": [
+      [
+        "CHICAGO",
+        316640
+      ],
+      [
+        "Chicago",
+        541
+      ],
+      [
+        "",
+        185
+      ],
+      [
+        "chicago",
+        175
+      ],
+      [
+        "CCHICAGO",
+        62
+      ],
+      [
+        "SCHAUMBURG",
+        30
+      ],
+      [
+        "EVANSTON",
+        28
+      ],
+      [
+        "CHicago",
+        22
+      ],
+      [
+        "MAYWOOD",
+        15
+      ],
+      [
+        "ELK GROVE VILLAGE",
+        13
+      ]
+    ],
+    "columns": [
+      "Inspection ID",
+      "DBA Name",
+      "AKA Name",
+      "License #",
+      "Facility Type",
+      "Risk",
+      "Address",
+      "City",
+      "State",
+      "Zip",
+      "Inspection Date",
+      "Inspection Type",
+      "Results",
+      "Violations",
+      "Latitude",
+      "Longitude",
+      "Location"
+    ],
+    "counts": {
+      "chicago_rows": 317328,
+      "duplicate_inspection_id_extra_rows": 0,
+      "rows": 317961
+    },
+    "date_max": "2026-10-29",
+    "date_min": "2010-01-04",
+    "facility_types": [
+      [
+        "Restaurant",
+        215777
+      ],
+      [
+        "Grocery Store",
+        38070
+      ],
+      [
+        "School",
+        19873
+      ],
+      [
+        "Children's Services Facility",
+        7871
+      ],
+      [
+        "",
+        5353
+      ],
+      [
+        "Bakery",
+        4569
+      ],
+      [
+        "Daycare Above and Under 2 Years",
+        4188
+      ],
+      [
+        "Daycare (2 - 6 Years)",
+        3271
+      ],
+      [
+        "Long Term Care",
+        2446
+      ],
+      [
+        "Catering",
+        1966
+      ]
+    ],
+    "license_address_groups_with_multiple_normalized_dba_names": 1078,
+    "missing": {
+      "AKA Name": 2425,
+      "Facility Type": 5353,
+      "Latitude": 1064,
+      "License #": 859,
+      "Longitude": 1064,
+      "Zip": 42
+    },
+    "normalized_chicago_addresses": 20110,
+    "results": {
+      "Business Not Located": 96,
+      "Fail": 61209,
+      "No Entry": 14281,
+      "Not Ready": 4650,
+      "Out of Business": 25993,
+      "Pass": 164640,
+      "Pass w/ Conditions": 47092
+    },
+    "types": [
+      [
+        "Canvass",
+        163940
+      ],
+      [
+        "License",
+        42659
+      ],
+      [
+        "Canvass Re-Inspection",
+        35447
+      ],
+      [
+        "Complaint",
+        30232
+      ],
+      [
+        "License Re-Inspection",
+        12886
+      ],
+      [
+        "Complaint Re-Inspection",
+        12719
+      ],
+      [
+        "Short Form Complaint",
+        9378
+      ],
+      [
+        "Non-Inspection",
+        5789
+      ],
+      [
+        "Suspected Food Poisoning",
+        1028
+      ],
+      [
+        "Consultation",
+        679
+      ],
+      [
+        "License-Task Force",
+        604
+      ],
+      [
+        "Tag Removal",
+        603
+      ]
+    ],
+    "valid_licenses_at_multiple_normalized_addresses": 319,
+    "years": {
+      "2010": 18068,
+      "2011": 18747,
+      "2012": 18866,
+      "2013": 20947,
+      "2014": 21540,
+      "2015": 20911,
+      "2016": 22818,
+      "2017": 21587,
+      "2018": 17191,
+      "2019": 19052,
+      "2020": 15123,
+      "2021": 15868,
+      "2022": 16936,
+      "2023": 18261,
+      "2024": 19228,
+      "2025": 19205,
+      "2026": 13613
+    }
+  },
+  "metadata": {
+    "counts": {
+      "chicago_pizza_unique_ids_first_metadata_record": 705,
+      "chicago_rows": 37339,
+      "chicago_unique_ids": 37127,
+      "duplicate_id_extra_rows": 1001,
+      "duplicate_rows_identical_to_first": 1001,
+      "rows": 179205,
+      "unique_ids": 178204
+    },
+    "duplicate_id_field_differences_vs_first": {
+      "address": 0,
+      "avg_rating": 0,
+      "latitude": 0,
+      "longitude": 0,
+      "name": 0,
+      "num_of_reviews": 0
+    },
+    "fields": [
+      "MISC",
+      "address",
+      "avg_rating",
+      "category",
+      "description",
+      "gmap_id",
+      "hours",
+      "latitude",
+      "longitude",
+      "name",
+      "num_of_reviews",
+      "price",
+      "relative_results",
+      "state",
+      "url"
+    ],
+    "missing": {
+      "address": 2163,
+      "category": 719
+    },
+    "pizza_state_values": [
+      [
+        "None",
+        193
+      ],
+      [
+        "Permanently closed",
+        121
+      ],
+      [
+        "Closed \u22c5 Opens 11AM",
+        51
+      ],
+      [
+        "Open \u22c5 Closes 10PM",
+        31
+      ],
+      [
+        "Closed \u22c5 Opens 4PM",
+        23
+      ],
+      [
+        "Closed \u22c5 Opens 10:30AM",
+        21
+      ],
+      [
+        "Open \u22c5 Closes 11PM",
+        20
+      ],
+      [
+        "Open \u22c5 Closes 12AM",
+        20
+      ],
+      [
+        "Closed \u22c5 Opens 10AM",
+        20
+      ],
+      [
+        "Open \u22c5 Closes 9PM",
+        20
+      ]
+    ]
+  },
+  "pizza_inspection_candidates": {
+    "counts": {
+      "exact_name_has_license_address_multiple_dba_names": 16,
+      "exact_street_and_name_candidates": 287,
+      "exact_street_candidates": 599,
+      "exact_street_name_nearest_over_100m": 5,
+      "exact_street_name_nearest_within_100m": 282,
+      "exact_street_name_one_valid_license": 172,
+      "exact_street_name_with_coordinates": 287,
+      "no_exact_street_with_any_candidate_within_100m": 99,
+      "no_exact_street_with_exact_name_within_100m": 40,
+      "street_has_multiple_licenses": 433
+    },
+    "examples": {
+      "address_name_disagreement": [
+        {
+          "google_name": "Deluxe Diner and Pizza",
+          "inspection_names": [
+            "DELUXE DINER"
+          ],
+          "street": "6349 N CLARK ST"
+        },
+        {
+          "google_name": "Fogo2go",
+          "inspection_names": [
+            "BNL's PIZZA & POKE",
+            "FAMILY STYLE PIZZA",
+            "FOGO TO GO",
+            "FRUNZE",
+            "NAUDI INC.",
+            "PAPA ROMEO'S PIZZA",
+            "TORTA HAUS"
+          ],
+          "street": "926 W DIVERSEY PKWY"
+        },
+        {
+          "google_name": "Pizza Hut Express",
+          "inspection_names": [
+            "65 POKE",
+            "ACCENTURE TOWER",
+            "AMAZON GO",
+            "AMERICAN WILDBURGER",
+            "ARBYS",
+            "AUNTIE ANNE'S PRETZELS",
+            "AUNTIE ANNIE'S PRETZELS",
+            "BAR PLENA OGILVIE IL LLC",
+            "BENJYEHUDA",
+            "BERRY CHILL"
+          ],
+          "street": "500 W MADISON ST"
+        },
+        {
+          "google_name": "Connie's Pizza at Navy Pier",
+          "inspection_names": [
+            "AMC THEATRES NAVY PIER IMAX",
+            "AMERICA'S DOG",
+            "AMRI JUICE BAR",
+            "AMRI SMOOTHIES & GELATO CAFE INC.",
+            "AUNTIE ANNE'S PRETZELS AND JAM",
+            "AUNTIE ANNIE'S PRETZELS AND JAMBA JUICE",
+            "BEAT KITCHEN",
+            "BEAT KITCHEN'S BAR SOL",
+            "BEN & JERRY'S",
+            "BEN & JERRY'S ( NAVY PIER )"
+          ],
+          "street": "600 E GRAND AVE"
+        },
+        {
+          "google_name": "baba pizza",
+          "inspection_names": [
+            "BABA PITA"
+          ],
+          "street": "1032 W LAKE ST"
+        }
+      ],
+      "multiple_exact_name_licenses": [
+        {
+          "google_name": "Pepperino Pizzeria",
+          "licenses": [
+            "2084073",
+            "2458049"
+          ],
+          "street": "1501 W MADISON ST"
+        },
+        {
+          "google_name": "Villa Rosa Pizza Kitchen",
+          "licenses": [
+            "2469888",
+            "2948269"
+          ],
+          "street": "5345 W DEVON AVE"
+        },
+        {
+          "google_name": "Pizza Hut",
+          "licenses": [
+            "1330686",
+            "2129794"
+          ],
+          "street": "2337 W CERMAK RD"
+        },
+        {
+          "google_name": "Lugano's Pizza",
+          "licenses": [
+            "2542789",
+            "33500"
+          ],
+          "street": "4460 S KEDZIE AVE"
+        },
+        {
+          "google_name": "Pranzi",
+          "licenses": [
+            "2262683",
+            "2262684"
+          ],
+          "street": "434 W ONTARIO ST"
+        }
+      ],
+      "no_exact_street": [
+        {
+          "address": "Caff\u00e8 Baci, 231 S LaSalle St, Chicago, IL 60604",
+          "google_name": "Caff\u00e8 Baci",
+          "nearby_names": [
+            "65 ASIAN KITCHKEN",
+            "90TH MERIDIAN",
+            "AMORINO GELATO",
+            "BAGEL & BEAN",
+            "BIG SHOULDERS COFFEE",
+            "BRIAZZ",
+            "CAFE 231",
+            "CAFFE BACI INC"
+          ]
+        },
+        {
+          "address": "Pizza And Pub, 1367 W Addison St, Chicago, IL 60657",
+          "google_name": "Pizza And Pub",
+          "nearby_names": [
+            "ANTHONY'S",
+            "BANH MI BA GET",
+            "BUTCHER'S TAP",
+            "CAFE TOLA",
+            "CAFE TOLA I",
+            "D'AGOSTINO'S PIZZA",
+            "D'AGOSTINOS PIZZA",
+            "DAVIDS TEA"
+          ]
+        },
+        {
+          "address": "Red Ivy, 3525 N Clark St, Chicago, IL 60657",
+          "google_name": "Red Ivy",
+          "nearby_names": [
+            "7-ELEVEN #37759 A",
+            "7-ELEVEN 37760A",
+            "ALAMO DRAFTHOUSE CINEMAS",
+            "BACCI PIZZA ON CLARK",
+            "BAR LOUIE WRIGLEYVILLE",
+            "BEERHEAD BAR & EATERY",
+            "CHEN'S",
+            "CHICK-FIL-A WRIGLEYVILLE"
+          ]
+        },
+        {
+          "address": "Piccolo Lounge and Pool Hall, 2610 W Peterson Ave, Chicago, IL 60659",
+          "google_name": "Piccolo Lounge and Pool Hall",
+          "nearby_names": [
+            "BABA GHANOUSH RESTAURANT",
+            "BABYLON BISTRO",
+            "BAR EL CALAMAR",
+            "CONNECTION",
+            "DECCAN LOUNGE AND KITCHEN",
+            "DOOSTAN RESTAURANT PERSIANS AND MEDITERRANEAN CUIS",
+            "DORA CAFE",
+            "ESTRADA"
+          ]
+        },
+        {
+          "address": "Sbarro, 4202A N Harlem Ave, Chicago, IL 60634",
+          "google_name": "Sbarro",
+          "nearby_names": []
+        }
+      ]
+    }
+  },
+  "reviews": {
+    "counts": {
+      "chicago_pizza_rows": 319340,
+      "chicago_rows": 6022071,
+      "metadata_places_without_reviews": 0,
+      "missing_gmap_id_rows": 0,
+      "missing_text_rows": 9984559,
+      "missing_user_id_rows": 134508,
+      "pizza_duplicate_full_record_extra_rows": 4570,
+      "pizza_duplicate_user_place_time_extra_rows": 4579,
+      "pizza_places_one_exact_candidate_license_and_reviews": 172,
+      "pizza_places_with_reviews": 705,
+      "pizza_places_with_street_and_name_candidate_and_reviews": 287,
+      "pizza_places_without_reviews": 0,
+      "pizza_repeated_user_place_extra_rows": 4579,
+      "pizza_same_identity_different_record_extra_rows": 9,
+      "pizza_unique_full_records": 314770,
+      "place_ids_absent_from_metadata": 0,
+      "rows": 23096838,
+      "rows_with_metadata_id": 23096838,
+      "unique_place_ids": 178204
+    },
+    "fields": [
+      "gmap_id",
+      "name",
+      "pics",
+      "rating",
+      "resp",
+      "text",
+      "time",
+      "user_id"
+    ],
+    "pizza_export_counts_vs_metadata": {
+      "places_export_count_above_metadata_count": 0,
+      "places_export_count_below_metadata_count": 209,
+      "places_export_count_equals_metadata_count": 496
+    },
+    "pizza_temporal_candidate_overlap": {
+      "unique_reviews_on_or_after_first_exact_name_candidate_inspection": 126446
+    },
+    "pizza_time_max_utc": "2021-08-17T17:05:08.393000+00:00",
+    "pizza_time_min_utc": "1990-12-31T00:00:00+00:00",
+    "pizza_unique_rating_counts": {
+      "1": 22943,
+      "2": 10046,
+      "3": 25316,
+      "4": 64466,
+      "5": 191999
+    },
+    "pizza_unique_review_years_utc": {
+      "1990": 1,
+      "2004": 2,
+      "2005": 2,
+      "2006": 11,
+      "2007": 7,
+      "2008": 5,
+      "2009": 21,
+      "2010": 217,
+      "2011": 633,
+      "2012": 1088,
+      "2013": 3335,
+      "2014": 2630,
+      "2015": 5137,
+      "2016": 17174,
+      "2017": 43849,
+      "2018": 86130,
+      "2019": 96327,
+      "2020": 43178,
+      "2021": 15023
+    },
+    "rating_counts": {
+      "1": 1687931,
+      "2": 717710,
+      "3": 1799377,
+      "4": 4170599,
+      "5": 14586713,
+      "None": 134508
+    },
+    "time_max_utc": "2021-09-08T23:17:20.232000+00:00",
+    "time_min_utc": "1990-12-31T00:00:00+00:00"
+  },
+  "scope_notes": [
+    "Chicago selected by address city in metadata and normalized City/State in inspections; not a geographic boundary test.",
+    "Pizza category substring selection uses the first Chicago metadata record per gmap_id; all duplicate IDs in this run have identical full records.",
+    "Exact street and name matches are candidates, not approved links. Units are excluded from street blocking keys.",
+    "Review duplicates analyzed in the Chicago pizza subset only; date ranges reported in UTC.",
+    "Inspection candidate date ranges describe observed inspections, not confirmed business operating dates."
+  ],
+  "source_bytes": {
+    "Food_Inspections_20261103.csv": 356226672,
+    "meta-Illinois.json": 192634795,
+    "review-Illinois.json": 7161113579
+  }
+}

@@ -2,3 +2,4 @@
 /review*.json
 /meta*.json
 /[Ff]ood_[Ii]nspections*.csv
+/yelp*.json

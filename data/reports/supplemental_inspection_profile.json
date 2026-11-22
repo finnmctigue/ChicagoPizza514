@@ -1,0 +1,27 @@
+{
+  "core_blank_violations_by_result": {
+    "Out of Business": 15161,
+    "Pass": 25133,
+    "No Entry": 11497,
+    "Not Ready": 2988,
+    "Fail": 2250,
+    "Pass w/ Conditions": 757,
+    "Business Not Located": 30
+  },
+  "core_inspection_date_bands": {
+    "after_2021_09_08": 64811,
+    "2010_to_2021_09_08": 150767
+  },
+  "violation_1_titles_by_period": {
+    "2018_onward": {
+      "1. PERSON IN CHARGE PRESENT, DEMONSTRATES KNOWLEDGE, AND PERFORMS DUTIES": 3941,
+      "1. SOURCE SOUND CONDITION, NO SPOILAGE, FOODS PROPERLY LABELED, SHELLFISH TAGS IN PLACE": 24
+    },
+    "before_2018": {
+      "1. SOURCE SOUND CONDITION, NO SPOILAGE, FOODS PROPERLY LABELED, SHELLFISH TAGS IN PLACE": 386
+    }
+  },
+  "core_coordinate_flags": {
+    "outside_broad_chicago_rectangle": 0
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "accepted_links_checked": 252,
+  "source_inspections_checked": 5343,
+  "monthly_rows_recomputed": 13271,
+  "primary_reviews_recomputed": 103049,
+  "first_primary_month": "2010-07-01",
+  "last_primary_month": "2021-08-01",
+  "primary_month_rows_by_year": {
+    "2010": 55,
+    "2011": 160,
+    "2012": 280,
+    "2013": 679,
+    "2014": 683,
+    "2015": 1053,
+    "2016": 1791,
+    "2017": 2192,
+    "2018": 2112,
+    "2019": 1953,
+    "2020": 1716,
+    "2021": 597
+  },
+  "coverage_note": "Months contain observed exported reviews only; 2021 source coverage ends in early September and is partial.",
+  "extra_checks": [
+    "No competing inspection license at accepted addresses across all city/state labels",
+    "No competing coordinate-nearby Google place, regardless of locality label",
+    "Every linked inspection reconciles to its raw event and complete license history",
+    "Every monthly rating/count/text aggregate recomputed from persisted reviews",
+    "Every prior inspection is unique and latest strictly before its month"
+  ]
+}

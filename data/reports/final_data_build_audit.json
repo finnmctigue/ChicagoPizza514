@@ -1,0 +1,38 @@
+{
+  "restaurants": 252,
+  "restaurant_columns": 48,
+  "reviews": 125254,
+  "review_columns": 28,
+  "inspection_events_summarized": 5343,
+  "reviews_with_text": 68144,
+  "date_valid_reviews": 125210,
+  "flagged_date_reviews": 44,
+  "primary_reviews": 103049,
+  "primary_restaurants": 249,
+  "primary_months": 13271,
+  "all_review_date_range_chicago": [
+    "2005-11-30",
+    "2021-08-28"
+  ],
+  "valid_review_date_range_chicago": [
+    "2010-01-05",
+    "2021-08-28"
+  ],
+  "inspection_date_range": [
+    "2010-01-04",
+    "2026-10-29"
+  ],
+  "review_mean_rating": 4.270673990451403,
+  "review_median_rating": 5.0,
+  "restaurant_median_review_count": 327.0,
+  "inspection_failure_share": 0.20548780487804877,
+  "validation": "Unique keys, exact restaurant/review coverage, many-to-one merges, inspection counts, and every primary monthly review count reconcile.",
+  "cleaned_restaurants.csv": {
+    "bytes": 238117,
+    "sha256": "82cae492e5caf83c862bff79f3d2ceee9388291d782df015c32932f9ff5e0b17"
+  },
+  "reviews.csv": {
+    "bytes": 58684583,
+    "sha256": "94f99cf8f9e841b94fd05e30981541f8af4a3895746456d7e1185293f7360efc"
+  }
+}

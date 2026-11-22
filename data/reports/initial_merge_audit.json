@@ -1,0 +1,217 @@
+{
+  "acceptance_checks": {
+    "accepted_links_one_to_one": true,
+    "all_conflicting_review_variants_flagged": true,
+    "all_input_sizes_unchanged": true,
+    "all_inspections_strictly_prior": true,
+    "all_monthly_links_accepted": true,
+    "all_months_bracketed": true,
+    "coordinate_threshold_respected": true,
+    "inspection_keys_unique": true,
+    "monthly_keys_unique": true,
+    "monthly_reviews_reconcile": true,
+    "no_missing_or_unscored_inspection_outcomes": true,
+    "persisted_review_candidate_flags_valid": true,
+    "persisted_review_foreign_keys_valid": true,
+    "persisted_review_keys_unique": true,
+    "place_keys_unique": true,
+    "review_dedup_reconciles": true,
+    "review_exclusions_reconcile": true,
+    "review_input_reconciles": true
+  },
+  "coverage": {
+    "matched_inspections": 5343,
+    "matched_places": 252,
+    "matched_reviews": 125254,
+    "unmatched_inspections": 210235,
+    "unmatched_places": 8065,
+    "unmatched_reviews": 2664021
+  },
+  "inspections": {
+    "scope_counts": {
+      "core_restaurant": 215578,
+      "facility_requires_review": 5615,
+      "non_chicago_or_uncertain_locality": 633,
+      "nonrestaurant_facility": 96135
+    },
+    "unique_inspection_ids": 317961
+  },
+  "matching": {
+    "accepted_inspection_events": 5343,
+    "accepted_places": 252,
+    "candidate_decisions": {
+      "accepted_exact": 252,
+      "pending": 4825,
+      "rejected": 31199,
+      "unmatched": 1492
+    },
+    "candidate_rows": 37768,
+    "place_reason_flags": {
+      "aka_name_conflicts": 5877,
+      "competing_google_place_at_address": 2926,
+      "coordinate_distance_exceeds_25m": 1698,
+      "dba_name_not_exact_throughout_history": 6094,
+      "google_address_not_strictly_parsed": 287,
+      "google_coordinates_missing_or_outside_screen": 2,
+      "inspection_address_not_strictly_parsed": 442,
+      "inspection_coordinates_missing_or_outside_screen": 101,
+      "inspection_locality_or_zip_conflict": 323,
+      "license_address_or_unit_changes": 692,
+      "license_has_noncore_facility_history": 2277,
+      "missing_google_name": 2,
+      "multiple_or_invalid_licenses_at_address": 5228,
+      "no_same_address_license_candidate": 1492,
+      "no_scored_inspections": 1664,
+      "overlapping_house_number_range": 724,
+      "terminal_status_precedes_later_scored_inspection": 1088
+    },
+    "unaccepted_core_places": 8065
+  },
+  "metadata": {
+    "conflicting_ids": 0,
+    "core_chicago_places": 8317,
+    "duplicate_id_extra_rows": 1001,
+    "scope_counts": {
+      "chicago_core": 8317,
+      "chicago_excluded": 28445,
+      "chicago_expanded": 365,
+      "other_core": 21972,
+      "other_excluded": 118307,
+      "other_expanded": 798
+    },
+    "unique_places": 178204
+  },
+  "monthly": {
+    "accepted_restaurants_without_primary_months": 3,
+    "candidate_months": 15720,
+    "candidate_reviews": 122945,
+    "decisions": {
+      "included": 13271,
+      "latest_inspection_same_day_tie": 19,
+      "latest_prior_event_not_scored": 259,
+      "month_not_bracketed_by_scored_observations": 42,
+      "prior_inspection_older_than_365_days": 2129
+    },
+    "included_months": 13271,
+    "included_restaurants": 249,
+    "included_reviews": 103049
+  },
+  "notes": [
+    "Candidate-reason counts overlap. Primary cohort has no fuzzy links.",
+    "Observed dates bound primary analysis conservatively; they are not proven business validity dates.",
+    "Review deduplication stores fingerprints across the full scoped stream; review payloads are batched.",
+    "All source dates remain in scoped tables; only eligible observations enter restaurant_month.",
+    "Monthly rows require observed reviews; zero-review months are not synthesized.",
+    "eligible_for_monthly_candidate flags review eligibility before month-level checks; join monthly_eligibility_audit for final inclusion.",
+    "Whole-history identity screening and bracketing use later observations for retrospective cohort selection; this is not a prospective training cohort."
+  ],
+  "outputs": {
+    "chicago_restaurant_inspections.parquet": {
+      "bytes": 42658112,
+      "rows": 215578
+    },
+    "chicago_restaurant_reviews.parquet": {
+      "bytes": 438843499,
+      "rows": 2789275
+    },
+    "chicago_restaurants.parquet": {
+      "bytes": 2816863,
+      "rows": 8317
+    },
+    "inspection_scope_audit.parquet": {
+      "bytes": 2985845,
+      "rows": 317961
+    },
+    "monthly_eligibility_audit.csv": {
+      "bytes": 1734562,
+      "rows": null
+    },
+    "place_scope_audit.parquet": {
+      "bytes": 17568113,
+      "rows": 178204
+    },
+    "restaurant_inspection_crosswalk.csv": {
+      "bytes": 29147673,
+      "rows": null
+    },
+    "restaurant_month.csv": {
+      "bytes": 4711928,
+      "rows": null
+    },
+    "restaurant_month.parquet": {
+      "bytes": 131914,
+      "rows": 13271
+    }
+  },
+  "parameters": {
+    "acceptance": "Exact name, street, unit, ZIP; one place and license at location; whole-license stable history; all coordinates within threshold",
+    "earliest_review_date_for_monthly": "2010-01-01",
+    "geography": "Chicago/IL address labels plus broad coordinate sanity rectangle; no municipal boundary polygon",
+    "max_coordinate_distance_m": 25.0,
+    "maximum_prior_inspection_age_days": 365,
+    "monthly_window": "Entire month strictly after first scored observation and ending no later than last scored observation",
+    "ownership_verification": "Source corroboration only; no independent ownership or opening/closing-date claim",
+    "threshold_status": "Conservative fixed policies, not statistically calibrated confidence guarantees",
+    "timezone": "America/Chicago"
+  },
+  "reviews": {
+    "conflicting_identity_groups": 28,
+    "counts": {
+      "deduplicated_scoped_rows": 2789275,
+      "exact_duplicate_extra_rows": 38950,
+      "input_rows": 23096838,
+      "outside_core_rows": 20268613,
+      "scoped_raw_rows": 2828225
+    },
+    "eligibility_first_exclusion": {
+      "before_analysis_coverage": 44,
+      "eligible": 122945,
+      "no_accepted_business_link": 2664021,
+      "outside_observed_scored_inspection_span": 2265
+    },
+    "matched_places_with_reviews": 252,
+    "overlapping_diagnostic_flags": {
+      "accepted_link_rows": 125254,
+      "identity_conflict_rows": 56,
+      "invalid_or_excluded_date_rows": 657,
+      "invalid_rating_rows": 448,
+      "missing_user_rows": 448,
+      "without_text_rows": 1264366
+    },
+    "places_with_reviews": 8317,
+    "time_max_utc": "2021-09-06T16:40:24.580000+00:00",
+    "time_min_utc": "1990-12-31T00:00:00+00:00",
+    "unmatched_places_with_reviews": 8065
+  },
+  "runtime_seconds": 547.77,
+  "sources": {
+    "Food_Inspections_20261103.csv": {
+      "bytes": 356226672,
+      "rows": 317961,
+      "sha256": "dd96122997336d16548292fed88dd44764878cde19e59b93a4c3fab8025ffbbc"
+    },
+    "meta-Illinois.json": {
+      "bytes": 192634795,
+      "rows": 179205,
+      "sha256": "4dbe4754cafd9dff229e0156b40fc23f7316c464da9421e9be1e6e269a503685"
+    },
+    "review-Illinois.json": {
+      "bytes": 7161113579,
+      "rows": 23096838,
+      "sha256": "a68dc55514288591f6c023a3dce48c9f9bf163d4d53bd6c0ebabd42010546e8b"
+    },
+    "yelp_academic_dataset_business.json": {
+      "bytes": 118863795,
+      "rows": 150346,
+      "sha256": "392280627d83ecdcbff8006bba5db289f8436ef147d5a103b1ace5b54186727f"
+    }
+  },
+  "status": "complete",
+  "version": "initial_exact_v1",
+  "yelp": {
+    "coordinates_inside_broad_chicago_rectangle": 0,
+    "dependent_files_scanned": false,
+    "eligible_chicago_restaurants": 0,
+    "reason": "No Chicago restaurant cohort; primary source is Google"
+  }
+}

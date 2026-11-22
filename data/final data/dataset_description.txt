@@ -1,0 +1,319 @@
+CHICAGOPIZZA514: DATASET DESCRIPTION
+
+Prepared for the local November 22, 2026 analysis snapshot.
+
+
+
+1. PURPOSE AND FINAL DATASETS
+
+The project studies historical customer reviews and food-inspection records for Chicago restaurants. The current scope is all restaurants, not only pizza restaurants.
+
+cleaned_restaurants.csv: 252 rows and 48 attributes. One row per accepted restaurant, combining Google place metadata with aggregate inspection history and review summaries.
+
+reviews.csv: 125,254 rows and 28 attributes. One deduplicated Google review per row. Every review belongs to one of the 252 restaurants; every restaurant has reviews.
+
+Join reviews.restaurant_id to cleaned_restaurants.restaurant_id (many-to-one). gmap_id is also preserved. Do not join raw review rows to raw inspection events without a date-specific design.
+
+The restaurant table summarizes 5,343 inspection events. It is not an inspection-event table; detailed events and original violation text remain under data/processed/initial_exact/.
+
+These files preserve the full accepted-business cohort. The narrower earlier monthly analysis contains 249 restaurants, 13,271 months and 103,049 reviews. Select included_in_primary_month == True to recover its review cohort.
+
+
+
+2. DATA SOURCES AND COLLECTION
+
+Google metadata and reviews: the identified public source is the UC San Diego McAuley Lab Google Local Data (2021) release, originating from Google Maps. Its published Illinois row counts match the local files exactly. [1]
+
+The publisher describes a US review and place-metadata collection through September 2021, including ratings, optional text/images and business attributes. The local files are JSON Lines. Publicly contributed reviews are observational records, not a probability sample. [1]
+
+Local acquisition provenance is limited: no original download command, transfer log, or independently verified upstream checksum is present. The source identification is supported by matching filenames, schemas and published counts; a particular download date or scraping procedure is not established. This task performed no new Google collection.
+
+Chicago inspections: the identified source is the City of Chicago Food Inspections dataset, ID 4ijn-s7e5. The local CSV is Food_Inspections_20261103.csv. Its filename suggests a November 3, 2026 snapshot but does not prove the acquisition date. [2]
+
+The City describes inspections conducted by the Chicago Department of Public Health Food Protection Program, recorded in a database and reviewed by a licensed environmental health practitioner. Findings describe conditions at inspection time. The source also notes a July 2018 procedure change and possible duplicates. [2]
+
+Yelp: the repository also contains five files named yelp_academic_dataset_*.json (business, review, tip, checkin and user), consistent with the Yelp Open Dataset format. They were inventoried locally but are not used in these final files. The original local acquisition date is unknown; the provider documentation page was access-restricted during this task. [3]
+
+Local processing: existing raw files were profiled; Chicago restaurant candidates were selected; stable exact business links were validated; reviews were streamed and deduplicated; date-aware monthly eligibility was computed. The final two CSVs were exported from those verified processed tables. Source SHA-256 hashes and counts are recorded in data/reports/initial_merge_audit.json; final file hashes are in data/reports/final_data_build_audit.json.
+
+
+
+3. INVENTORY AND OBSERVED DURATION
+
+Google metadata: 179,205 raw rows; meta-Illinois.json.
+
+Google reviews: 23,096,838 raw rows; review-Illinois.json.
+
+Chicago inspections: 317,961 raw rows; Food_Inspections_20261103.csv.
+
+Yelp business: 150,346 raw rows; yelp_academic_dataset_business.json.
+
+Yelp review: 6,990,280 raw rows; yelp_academic_dataset_review.json.
+
+Yelp tip: 908,915 raw rows; yelp_academic_dataset_tip.json.
+
+Yelp checkin: 131,930 raw rows; yelp_academic_dataset_checkin.json.
+
+Yelp user: 1,987,897 raw rows; yelp_academic_dataset_user.json.
+
+Raw Google metadata has 178,204 unique gmap_id values; 1,001 repeated rows were identical. It has no explicit snapshot date for average ratings, review counts, hours, price or operating status.
+
+Raw inspections: 2010-01-04 through 2026-10-29. Final accepted inspection histories: 2010-01-04 through 2026-10-29.
+
+Raw statewide Google review timestamps: 1990-12-31T00:00:00+00:00 through 2021-09-08T23:17:20.232000+00:00 (UTC; the early bound includes implausible dates).
+
+Final valid review dates: 2010-01-05 through 2021-08-28 in America/Chicago. All retained timestamps, including flagged dates, span 2005-11-30 through 2021-08-28 locally.
+
+44 review dates are flagged rather than rewritten; these remain usable for date-independent ratings but not time-dependent analysis. Source coverage in 2021 is partial. Missing review months are not proven zero-activity periods.
+
+Local Yelp review records span 2005-02-16 03:23:22 through 2022-01-19 19:48:45 (timezone not established). Check-in rows encode timestamp lists, not individual visits. User yelping_since describes account creation, not the date of every profile attribute.
+
+
+
+4. DATA PREPARATION
+
+a. Scope: Chicago/IL address labels and the documented restaurant-category rules select 8,317 Google places. Inspection scope requires normalized Chicago/IL and Facility Type = Restaurant, retaining 215,578 events. Cafe-only and uncertain categories remain outside the core. Geographic screening is not an official city-boundary polygon test.
+
+b. Exact matching: normalize case, accents, punctuation, street direction/suffix and units. Require exact restaurant names against DBA and nonblank AKA histories; exact street/unit/ZIP; a unique place and license at the address; consistent full-license restaurant history; and Google-to-inspection coordinates no more than 25 meters apart. Competing operators, unresolved ranges/units and inconsistent histories are excluded.
+
+c. The strict rules accepted 252 businesses. These are verifiable agreements in the supplied records, not independent proof of ownership or business opening/closing dates. Observed inspection bounds are explicitly named as observations.
+
+d. Stream Google reviews by selected gmap_id. Across the entire Chicago restaurant core, 2,828,225 raw review rows became 2,789,275 distinct full records after removing 38,950 exact repeats. Generate stable SHA-256 review IDs and flag all variants of conflicting user/place/time identities. The final accepted cohort contains no such identity conflicts and has valid ratings and user IDs.
+
+e. Preserve source timestamps, convert milliseconds to UTC, and derive Chicago-local calendar dates. Keep date-status flags. Pre-2010 dates outside inspection coverage and invalid/future dates cannot enter the temporal analysis. Ratings without text are retained; missing text is not imputed or labeled neutral.
+
+f. The temporal subset requires reviews within the observed scored-inspection span; months wholly bracketed by scored observations; and a unique, scored prior inspection strictly before the month, at most 365 days old. Same-day ties and latest non-scored events exclude the month. Pass, conditional pass and fail remain distinct.
+
+g. Final restaurant rows aggregate inspection outcomes over their complete accepted history. Inspection failure share is Fail / (Pass + Pass w/ Conditions + Fail); other statuses are not treated as passes. Review summaries use the final exported review rows. Optional metadata and absent text remain missing; identifiers remain strings.
+
+h. Retain 125,254 accepted-business reviews with their eligibility flags; do not conflate them with the 103,049-review monthly subset. Source reviewer display names, picture payloads and business response payloads are available in the processed source table but omitted from the final review file because this descriptive analysis does not require them.
+
+i. Check unique primary keys, referential integrity, exact row-count reconciliation, many-to-one join validation, and agreement with every primary monthly review count. The previous pipeline also passed 23 focused tests and an independent source/aggregate verification.
+
+
+
+5. ATTRIBUTES IN THE ORIGINAL SOURCES
+
+Google metadata: gmap_id, name, address, latitude, longitude, category, description, avg_rating, num_of_reviews, price, hours, MISC, state (operating status), relative_results and url.
+
+Google reviews: user_id, name (reviewer, not business), time (milliseconds), rating, text, pics, resp and gmap_id.
+
+Inspections: Inspection ID, DBA Name, AKA Name, License #, Facility Type, Risk, Address, City, State, Zip, Inspection Date, Inspection Type, Results, Violations, Latitude, Longitude and Location.
+
+Unused Yelp files: business identifiers/location/categories/stars/attributes/hours; review identifiers, user/business IDs, stars/text/date/votes; tips with text/date/compliments; check-in timestamp lists; user account dates, counts, average stars, friends, fans, elite and compliments.
+
+
+
+6. FINAL ATTRIBUTE DICTIONARY: cleaned_restaurants.csv
+
+restaurant_id: Primary key; stable Google-based restaurant identifier.
+
+gmap_id: Original Google place identifier; string, not numeric.
+
+business_episode_id: Identifier for the accepted stable observed business history; not proof of ownership dates.
+
+license: Chicago inspection license identifier, stored as text.
+
+place_name: Google business name.
+
+raw_address: Original Google address, including its business-name prefix.
+
+street: Normalized street address including house number/suffix.
+
+unit: Normalized suite/unit/floor; blank means not supplied, not a verified absence of a unit.
+
+city: Parsed city (CHICAGO for this cohort).
+
+geographic_state: Parsed geographic state (IL), not Google operating status.
+
+zip: Five-digit postal code, retained as text.
+
+latitude: Google latitude in decimal degrees.
+
+longitude: Google longitude in decimal degrees.
+
+categories_json: Google category list serialized as JSON; categories overlap.
+
+operating_status: Undated Google opening/closure status; not current verified status.
+
+price: Optional undated Google price category.
+
+business_description: Optional Google business description.
+
+hours_json: Optional Google opening-hours list serialized as JSON; blank if missing.
+
+google_maps_url: Place URL in the original Google metadata.
+
+snapshot_avg_rating: Undated Google metadata average rating; not recomputed from the export.
+
+snapshot_num_reviews: Undated Google metadata review count; may differ from exported rows.
+
+match_method: Exact matching rule version used to accept this restaurant.
+
+match_distance_max_m: Largest Google-to-inspection coordinate distance over the accepted history, in meters.
+
+observed_first_scored_date: First observed Pass/Conditional/Fail inspection, not an opening date.
+
+observed_last_scored_date: Last observed Pass/Conditional/Fail inspection, not a closing date.
+
+inspection_first_date: First inspection event of any result for this accepted history.
+
+inspection_last_date: Last inspection event of any result for this accepted history.
+
+inspection_count: Number of unique inspection events across the entire accepted history.
+
+inspection_pass_count: Events with result Pass.
+
+inspection_conditional_count: Events with result Pass w/ Conditions.
+
+inspection_fail_count: Events with result Fail.
+
+inspection_no_entry_count: Events with result No Entry; not treated as passes or failures.
+
+inspection_not_ready_count: Events with result Not Ready; not treated as passes or failures.
+
+inspection_out_of_business_count: Events with result Out of Business.
+
+inspection_business_not_located_count: Events with result Business Not Located.
+
+inspection_missing_violations_count: Events without violation text; absence does not establish no violations.
+
+scored_inspection_count: Pass + Pass w/ Conditions + Fail event count.
+
+inspection_failure_share: Fail / scored_inspection_count over the full inspection history; descriptive, not historical predictor.
+
+review_count: All deduplicated review records for the accepted place, including flagged dates.
+
+reviews_with_text: Review records with nonblank text.
+
+valid_date_review_count: Review records with date_status == valid; includes records outside the observed inspection span.
+
+monthly_candidate_review_count: Review records passing the pre-month checks.
+
+primary_month_review_count: Review records actually represented in the earlier primary monthly dataset.
+
+mean_export_rating: Mean valid rating across the restaurant's exported reviews, irrespective of date eligibility.
+
+median_export_rating: Median valid rating across exported reviews.
+
+first_valid_review_date: Earliest valid Chicago-local review date; not a proven start of source coverage.
+
+last_valid_review_date: Latest valid Chicago-local review date; not a proven end of business activity.
+
+primary_month_count: Number of rows for this restaurant in restaurant_month.parquet; can be zero.
+
+
+
+7. FINAL ATTRIBUTE DICTIONARY: reviews.csv
+
+review_id: Primary key; SHA-256 fingerprint of the original full review record.
+
+restaurant_id: Foreign key to cleaned_restaurants.csv; many reviews to one restaurant.
+
+gmap_id: Original Google place identifier.
+
+business_episode_id: Same observed-history identifier as the restaurant table.
+
+source: Review platform, google for every row.
+
+user_id: Original reviewer identifier, retained as text; unrelated to Yelp IDs.
+
+rating: Google rating on the 1-5 scale; valid ratings without text are retained.
+
+text: Original review text; blank means unavailable/blank, not neutral sentiment.
+
+has_text: True if text is nonblank after whitespace checking.
+
+time_ms: Original numeric Unix timestamp in milliseconds.
+
+raw_time_json: Unmodified source timestamp encoded as JSON.
+
+review_time_utc: Parsed timezone-aware UTC timestamp.
+
+review_date_chicago: Local calendar date in America/Chicago.
+
+review_month: First day of the Chicago calendar month, even when the date is flagged.
+
+review_year: Chicago calendar year for valid dates only; blank for flagged dates.
+
+date_status: valid, before_analysis_coverage, invalid_timestamp, or after_analysis_date.
+
+date_valid_for_analysis: True exactly when date_status is valid.
+
+rating_valid: Whether the source rating is a valid 1-5 value.
+
+user_id_present: Whether a source user ID is available.
+
+identity_conflict: Whether distinct full records share user/place/time; all variants are flagged.
+
+eligible_for_monthly_candidate: Passes business-link, identity, user, rating, date, and observed-span checks before month-level checks.
+
+candidate_eligibility_reason: First pre-month exclusion reason, or eligible.
+
+included_in_primary_month: True only for reviews represented in the earlier 13,271-row primary monthly table.
+
+primary_analysis_status: included or the first review/month-level exclusion reason.
+
+prior_inspection_id: Inspection linked by the primary monthly table; blank unless included_in_primary_month.
+
+prior_inspection_date: Date of that inspection, strictly before review_month; blank otherwise.
+
+prior_inspection_result: Pass / Pass w/ Conditions / Fail from the linked event; blank otherwise.
+
+prior_inspection_age_days: Age of the linked inspection at the beginning of the review month, not review day.
+
+
+
+8. SHORT DESCRIPTIVE SUMMARY
+
+Restaurants: 252; reviews: 125,254; reviews with text: 68,144 (54.4%); valid-date reviews: 125,210.
+
+Review-weighted mean rating: 4.271/5; median rating: 5.0/5. Median reviews per restaurant: 327.0.
+
+Accepted inspection events: 5,343; failure share among scored outcomes: 20.55%. This is an event-level historical description, not a current failure probability.
+
+Open descriptive_analysis.ipynb in this directory and run all cells for numeric summaries, missing-value tables, frequency/cross-tabulation tables, valid-date yearly summaries, charts and an interpretation report. All statistics are computed from the two final CSVs.
+
+
+
+9. BENEFITS AND LIMITATIONS
+
+Benefits: two clearly defined table grains; exact source-supported identity links; stable identifiers; review text and ratings; inspection outcome histories; separate missingness/date flags; reproducible filters and checks. The sample supports descriptive customer-experience analysis and carefully aligned historical comparisons.
+
+Limits: only 252 of 8,317 candidate Google restaurants passed the strict rules, so this is not a census or representative random sample. Stable names, addresses, licenses and clean geocodes are favored. Chains and high-review-volume restaurants may dominate review-weighted summaries.
+
+Reviews are self-selected contributions; missing text prevents sentiment measurement for many records. Ratings are not direct measures of food safety. Language, sarcastic text, reviewer behavior and unobserved collection effects can bias text analysis; this script does not assign sentiment labels.
+
+Google review coverage ends in 2021, whereas inspection histories extend into 2026. Lifetime inspection aggregates and undated metadata must not be used as if they were known at a historical prediction date. Whole-history screening and bracketing use later observations to choose a retrospective cohort and can introduce survival/selection bias.
+
+Inspection types have different sampling mechanisms, repeat inspections are not independent restaurant observations, blank violations do not imply no violations, and violation-code meanings change across years. Source labels and coordinates can be wrong even when they agree. The 25-meter/365-day thresholds are conservative policies, not calibrated guarantees.
+
+Dates indicate observed records, not operating intervals. Google metadata review counts and exported counts need not agree. No causal effects or prediction accuracy are established by these descriptive statistics. Yelp contributes no final observations: there were zero eligible Chicago restaurants and zero records in the broad Chicago coordinate screen.
+
+
+
+10. METHODS ADAPTED FROM THE LOCAL COURSE REPOSITORIES
+
+datamining/module2/[6] Introduction to EDA (Complete).ipynb: zero-based notebook cell indices 10-11 (missingness/info), 27 (describe), 32/34 (histograms/boxplots), 41/44 (frequency counts), 55 (scatterplot), 58 (groupby/aggregation), 62 (crosstab), 64/66 (correlation).
+
+ISA591/Class Notebooks/[7] ISA591 EDA Worksheet Part2 (Complete).ipynb: cells 6-7, 11, 23 and 39 (missing values, fractions, mean/median and descriptive tables).
+
+The analysis uses these descriptive pandas/Matplotlib methods, with transparent boolean filtering for date/rating eligibility. It does not introduce a predictive model or silently apply the course examples' imputation choices to these data.
+
+
+
+11. SOURCES AND REPRODUCTION
+
+[1] UCSD McAuley Lab, Google Local Data (2021): https://mcauleylab.ucsd.edu/public_datasets/gdrive/googlelocal/ ; dataset/attribute reference: https://cseweb.ucsd.edu/~jmcauley/datasets.html . Consulted November 22, 2026.
+
+[2] City of Chicago Food Inspections (4ijn-s7e5): https://data.cityofchicago.org/Health-Human-Services/Food-Inspections/4ijn-s7e5 ; official City-published catalog description: https://catalog.data.gov/dataset/food-inspections . Consulted November 22, 2026. The live portal is newer than the local CSV; reported counts come from the local snapshot.
+
+[3] Yelp Open Dataset documentation reference: https://www.yelp.com/dataset/documentation/main . Retrieval returned HTTP 403; Yelp descriptions and counts here are based on the local files, not a newly verified download.
+
+From the ChicagoPizza514 repository: python prepare_final_data.py
+
+Then: python "data/final data/descriptive_analysis.py"
+
+Read CSV identifiers as strings. The analysis notebook demonstrates correct loading and validation. Empty CSV fields mean missing/not applicable; do not replace them universally with zero.
+
+Final data CSVs and generated analysis outputs are ignored by Git; code and this description can be versioned. No source data was recollected during export.

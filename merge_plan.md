@@ -2,6 +2,14 @@
 
 Updated November 18, 2026. The target is **all Chicago restaurants**, not only pizza restaurants. This is a plan for preparing the data; candidate business matches are not yet verified.
 
+Implementation update, November 22, 2026: `build_initial_merge.py` implements a
+deliberately narrower first pass using exact, corroborated links only. See
+`README.md` for its acceptance and temporal policies and
+`data/reports/initial_merge_audit.json` for build status and counts. Its outputs
+are under `data/processed/initial_exact/`; fuzzy and unresolved candidates remain
+outside the primary merged table. Acceptance verifies agreement within the source
+records, not independent ownership or business opening/closing dates.
+
 ## 1. Source inventory and coverage
 
 All Google/Yelp JSON files are JSON Lines (one object per line), read with `lines=True`. Inspections are CSV. A `head(5)` display does not restrict the underlying read or establish geographic coverage.
@@ -117,6 +125,10 @@ Acceptance checks:
 - Report matched/unmatched restaurant, review, and inspection counts separately, with date coverage and exclusions.
 - Compare matched versus unmatched coverage and core versus expanded restaurant definitions. Do not present the matched subset as a complete Chicago census.
 
-### Notebook follow-ups observed on disk
+### Notebook implementation
 
-The saved notebook still limits Google metadata to 1,000 rows, reads Google reviews without a row/chunk limit, and contains unfinished `metadata.category.n`. Its saved version does not show Yelp preview cells yet. Full-cohort processing must remove the metadata sample limit, stream reviews, and complete/remove the unfinished cell. This change replaces the plan only; it does not modify the notebook or raw datasets.
+`pizza.ipynb` now reads the completed initial merged table and audit summaries.
+It displays explicitly limited Parquet previews of scoped places, reviews, and
+inspections; it no longer loads the raw statewide review file. Full processing is
+performed by `build_initial_merge.py`, with validation in `test_initial_merge.py`
+and an independent source/aggregate check in `verify_initial_merge.py`.

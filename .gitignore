@@ -3,3 +3,14 @@
 /meta*.json
 /[Ff]ood_[Ii]nspections*.csv
 /yelp*.json
+
+# Reproducible local extracts and merge staging (contain review-level records).
+/data/processed/
+/data/staging/
+__pycache__/
+.pytest_cache/
+pytest-cache-files-*/
+
+# Final local datasets; keep the analysis code and dataset description in Git.
+/data/final data/*.csv
+/data/final data/analysis_outputs/
